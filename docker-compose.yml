@@ -1,1 +1,44 @@
-  
+
+services:
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    ports:
+      - "3000:3000" # Esponiamo la porta per il debug diretto
+    environment:
+      # Passiamo le variabili d'ambiente al container del backend
+      DATABASE_URL: "mysql://user:password@db:3306/candidature_db"
+      API_KEY: "LA_TUA_CHIAVE_SEGRETA_PER_IL_BOT"
+      JWT_SECRET: "IL_TUO_SEGRETO_PER_I_TOKEN"
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    ports:
+      - "80:80" # Esponiamo la porta 80, quella standard del web
+    depends_on:
+      - backend
+
+  db:
+    image: mariadb:10.6
+    restart: unless-stopped
+    ports:
+      - "3306:3306" # Esponiamo la porta del database
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: candidature_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - db_data:/var/lib/mysql
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080" # Interfaccia DB accessibile su http://localhost:8080
+
+volumes:
+  db_data:
