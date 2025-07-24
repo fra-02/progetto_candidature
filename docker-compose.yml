@@ -5,11 +5,8 @@ services:
     restart: unless-stopped
     ports:
       - "3000:3000" # Esponiamo la porta per il debug diretto
-    environment:
-      # Passiamo le variabili d'ambiente al container del backend
-      DATABASE_URL: "mysql://user:password@db:3306/candidature_db"
-      API_KEY: "LA_TUA_CHIAVE_SEGRETA_PER_IL_BOT"
-      JWT_SECRET: "IL_TUO_SEGRETO_PER_I_TOKEN"
+    env_file:
+      - ./backend/.env
     depends_on:
       - db
 
