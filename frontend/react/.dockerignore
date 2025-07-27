@@ -1,0 +1,23 @@
+# Dipendenze locali (non devono mai essere copiate)
+node_modules
+
+# Cartella di output della build (verrà creata DENTRO il container)
+dist
+build
+
+# File di ambiente locale (contengono segreti)
+.env
+.env.local
+.env.*.local
+
+# Log di NPM
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Configurazioni degli editor
+.vscode
+.idea
+
+# Cartella di Git
+.git

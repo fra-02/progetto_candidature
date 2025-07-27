@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: '/api', // Il proxy di Nginx reindirizzerà questo
+  baseURL: '/api', 
 });
 
 const mockCandidates = [
@@ -12,7 +12,6 @@ const mockCandidates = [
 
 export const getCandidates = async (page = 1, limit = 10, filters = {}) => {
   console.log("Fetching candidates with filters:", filters);
-  // Qui potresti anche implementare una logica di filtro finta
   await new Promise(resolve => setTimeout(resolve, 500)); // Simula la rete
   return {
     data: mockCandidates.slice((page - 1) * limit, page * limit),
