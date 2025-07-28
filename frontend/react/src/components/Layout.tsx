@@ -35,12 +35,10 @@ const Layout = () => {
         <nav className="flex-grow p-4">
           <ul className="space-y-2">
             <li>
-              {/* Usiamo il componente <Link> di react-router per una navigazione client-side veloce. */}
               <Link to="/" className="block px-4 py-2 rounded transition duration-200 hover:bg-gray-700">
                 Dashboard
               </Link>
             </li>
-            {/* Questa sezione è pronta per essere estesa con futuri link di navigazione. */}
           </ul>
         </nav>
         {/* --- Area Utente e Logout --- */}
@@ -59,8 +57,6 @@ const Layout = () => {
       </aside>
 
       {/* --- Area Contenuto Principale --- */}
-      {/* <Outlet> è un segnaposto speciale di react-router-dom dove verrà
-          renderizzato il componente della rotta figlia attiva. */}
       <main className="flex-1 p-6 sm:p-8 overflow-y-auto">
         <Outlet />
       </main>

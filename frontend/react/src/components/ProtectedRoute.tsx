@@ -12,20 +12,15 @@ import { Navigate } from 'react-router-dom';
 import Layout from './Layout';
 
 const ProtectedRoute = () => {
-  // La logica di autenticazione è semplice: controlla se il token esiste.
-  // In un'applicazione reale, si potrebbe anche decodificare il token per verificarne la scadenza.
+  // Logica di autenticazione: controlla se il token esiste.
   const isAuthenticated = localStorage.getItem('authToken');
 
   if (!isAuthenticated) {
-    // Se non c'è token, usiamo il componente <Navigate> di react-router per
-    // eseguire un reindirizzamento dichiarativo. L'opzione `replace`
-    // sostituisce la pagina corrente nella cronologia di navigazione,
-    // così l'utente non può tornare indietro a una pagina protetta con il tasto "back".
+    // Se non è autenticato, reindirizza alla pagina di login.
     return <Navigate to="/login" replace />;
   }
 
-  // Se l'utente è autenticato, renderizziamo il Layout, che a sua volta
-  // si occuperà di renderizzare la rotta figlia corrispondente tramite <Outlet>.
+  // Se è autenticato, renderizza il Layout principale.
   return <Layout />;
 };
 
