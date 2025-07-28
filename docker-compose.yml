@@ -1,21 +1,28 @@
+version: '3.8'
 
 services:
   backend:
-    build: ./backend
+    build:
+      context: ./backend
     restart: unless-stopped
     ports:
-      - "3000:3000" # Esponiamo la porta per il debug diretto
+      - "3000:3000"
     env_file:
       - ./backend/.env
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    # Attende che il DB sia 'healthy' prima di partire
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
 
   frontend:
     build:
       context: ./frontend/react
-
     working_dir: /app
-    
     restart: unless-stopped
     ports:
       - "5173:5173"
@@ -24,12 +31,12 @@ services:
       - /app/node_modules
     depends_on:
       - backend
+    networks:
+      - app-network
 
   db:
     image: mariadb:10.6
     restart: unless-stopped
-    ports:
-      - "3306:3306" # Esponiamo la porta del database
     environment:
       MYSQL_ROOT_PASSWORD: root_password
       MYSQL_DATABASE: candidature_db
@@ -37,12 +44,28 @@ services:
       MYSQL_PASSWORD: password
     volumes:
       - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - app-network
 
   adminer:
     image: adminer
     restart: always
     ports:
-      - "8080:8080" # Interfaccia DB accessibile su http://localhost:8080
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - app-network
 
 volumes:
   db_data:
+
+networks:
+  app-network:
+    driver: bridge
