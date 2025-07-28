@@ -1,32 +1,25 @@
-// Import di base
 import express, { Request, Response, NextFunction } from 'express'; // <-- Aggiunti i tipi
-import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
-
-// Import per la gestione errori
-import { Prisma } from '@prisma/client'; // <-- Aggiunto per i tipi di errore di Prisma
-
-// Import delle rotte
+import { Prisma } from '@prisma/client';                    // <-- Aggiunto per i tipi di errore di Prisma
+import cors from 'cors';                                    // Import delle rotte
 import candidateRoutes from './routes/candidateRoutes';
 import authRoutes from './routes/authRoutes';
 
 dotenv.config();
 const app = express();
 
-// --- MIDDLEWARE GLOBALI ---
+// --- MIDDLEWARES ---
+// 1. Middleware per abilitare CORS
+app.use(cors());
 
 // 2. Middleware per il parsing del body JSON delle richieste
 app.use(express.json());
 
-// 3. Rate Limiter
-const botLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 10, message: 'Troppe richieste dal bot, riprova più tardi.' });
-const userLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 100, message: 'Troppe richieste, riprova più tardi.' });
-
 // --- ROUTING ---
 
 // Limitatori per le rotte 
-app.use('/api/auth', userLimiter, authRoutes);
-app.use('/api/candidates', botLimiter, candidateRoutes); // Applichiamo il limiter più restrittivo qui
+app.use('/api/auth', authRoutes);
+app.use('/api/candidates', candidateRoutes); // Applichiamo il limiter più restrittivo qui
 
 
 // --- GESTIONE ERRORI GLOBALE ---

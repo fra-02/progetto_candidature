@@ -36,6 +36,7 @@ export const getCandidates = async (req: Request, res: Response, next: NextFunct
       orderBy: { createdAt: 'desc' },
       include: {
         reviews: true,
+        tags: true,
       },
     });
     res.json(candidates);
@@ -50,7 +51,10 @@ export const getCandidateById = async (req: Request, res: Response, next: NextFu
     const { id } = req.params;
     const candidate = await prisma.candidate.findUnique({
       where: { id: parseInt(id) },
-      include: { reviews: true },
+      include: { 
+        reviews: true,
+        tags: true,  
+      },
     });
 
     if (!candidate) {
@@ -154,4 +158,15 @@ export const deleteCandidate = async (req: Request, res: Response, next: NextFun
     } catch (error) {
         next(error);
     }
+};
+
+export const getAvailableTags = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const tags = await prisma.tag.findMany({
+      orderBy: { name: 'asc' },
+    });
+    res.json(tags);
+  } catch (error) {
+    next(error);
+  }
 };
