@@ -3,6 +3,10 @@
 .env.*.local
 .env.local
 
+// File di configurazione di Next.js
+backend/package-lock.json
+frontend/package-lock.json
+
 # Log files
 npm-debug.log*
 yarn-debug.log*
@@ -31,7 +35,8 @@ Thumbs.db
 .idea/
 
 # File di configurazione di Prisma
-backend/prisma/migrations/
+# backend/prisma/migrations/
+backend/prisma/seed.ts
 
 # File di cache di TypeScript
 *.tsbuildinfo

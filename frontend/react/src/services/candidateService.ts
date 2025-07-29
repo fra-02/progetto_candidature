@@ -66,7 +66,8 @@ export const getCandidates = async (): Promise<Candidate[]> => {
  */
 export const getAvailableTags = async (): Promise<Tag[]> => {
   try {
-    const response = await apiService.get<Tag[]>('/candidates/tags');
+    // CORREZIONE: Chiama l'endpoint corretto per i tag.
+    const response = await apiService.get<Tag[]>('/tags');
     return response.data;
   } catch (error) {
     console.error("Errore nel recupero dei tag:", error);
