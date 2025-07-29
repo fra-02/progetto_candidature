@@ -100,3 +100,14 @@ export const deleteCandidate = async (candidateId: number): Promise<void> => {
     throw error; // Rilancia l'errore per gestirlo a livello superiore
   }
 };
+
+export const updateCandidate = async (id: number, data: Partial<Candidate>): Promise<Candidate> => {
+  try {
+    // Invia la richiesta PUT all'endpoint corretto con solo i dati da aggiornare.
+    const response = await apiService.put<Candidate>(`/candidates/${id}`, data);
+    return response.data;
+  } catch (error) {
+    console.error(`Errore nell'aggiornamento del candidato con ID ${id}:`, error);
+    throw error;
+  }
+};

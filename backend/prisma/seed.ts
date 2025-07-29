@@ -79,7 +79,7 @@ async function main() {
         status,
         fullName,
         email,
-        githubLink: `github.com/${faker.internet.username({ firstName, lastName })}`, // CORRETTO: username()
+        githubLink: `github.com/${faker.internet.userName({ firstName, lastName })}`, // CORRETTO: username()
         rawAnswers: { "screen_0_TextInput_0": fullName, "screen_0_TextInput_1": email },
         tags: {
           connect: randomTags.map(tag => ({ id: tag.id })),

@@ -66,3 +66,19 @@ model Review {
 
   @@unique([candidateId, userId, phase])
 }
+
+model RequestLog {
+  id         Int      @id @default(autoincrement())
+  timestamp  DateTime @default(now())
+  
+  method     String   // GET, POST, etc.
+  path       String   @db.VarChar(2048) // Limite per URL lunghi
+  statusCode Int
+  latencyMs  Int      // Tempo di risposta
+  
+  ipAddress  String?
+  
+  // Informazioni sull'identità
+  userId     Int?     // ID dell'utente se loggato con JWT
+  apiKeyUsed Boolean  @default(false)
+}

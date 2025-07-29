@@ -49,6 +49,15 @@ export const appReducer = (state: AppState, action: AppAction): AppState => {
         ...state,
         candidates: state.candidates.filter(candidate => candidate.id !== action.payload.id),
       };
+      case 'UPDATE_CANDIDATE_SUCCESS':
+      return {
+        ...state,
+        // Sostituiamo il vecchio candidato con quello aggiornato.
+        candidates: state.candidates.map(candidate =>
+          candidate.id === action.payload.id ? action.payload : candidate
+        ),
+      };
+
       
     default:
       return state;

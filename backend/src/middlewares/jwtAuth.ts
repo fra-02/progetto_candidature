@@ -10,6 +10,7 @@ interface TokenPayload extends JwtPayload {
 // Interfaccia per la richiesta autenticata
 export interface AuthRequest extends Request {
   userId?: number;
+  apiKeyUsed?: boolean;
 }
 
 export const jwtAuth = (req: AuthRequest, res: Response, next: NextFunction) => {
@@ -46,7 +47,7 @@ export const jwtAuth = (req: AuthRequest, res: Response, next: NextFunction) => 
     }
 
   } catch (error) {
-    // Questo catch gestisce sia token scaduti/malformati sia il nostro errore custom
+    // Questo catch gestisce sia token scaduti/malformati sia errori custom
     return res.status(401).json({ message: 'Token non valido o scaduto' });
   }
 };

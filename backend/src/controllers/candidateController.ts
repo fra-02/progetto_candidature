@@ -144,7 +144,6 @@ export const createPhaseTwoReview = async (req: AuthRequest, res: Response, next
 export const updateCandidate = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
-
         if (!id) {
           return res.status(400).json({ message: 'Candidate ID is required' });
         }
@@ -158,6 +157,11 @@ export const updateCandidate = async (req: Request, res: Response, next: NextFun
                 email,
                 githubLink,
             },
+            include: {
+                reviews: true,
+                tags: true,
+            },
+            // -----------------------------
         });
         res.json(updatedCandidate);
     } catch (error) {

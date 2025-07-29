@@ -1,22 +1,47 @@
-import express, { Request, Response, NextFunction } from 'express'; // Importa express e i tipi Request, Response, NextFunction
+import express, { Request, Response, NextFunction } from 'express';
+import cors from 'cors';
 import dotenv from 'dotenv';
-import { Prisma } from '@prisma/client';                    // Importa Prisma per gestire gli errori specifici
-import cors from 'cors';                                    // Import delle rotte
+import { PrismaClient, Prisma } from '@prisma/client';
+import { AuthRequest } from './middlewares/jwtAuth'; 
+
 import candidateRoutes from './routes/candidateRoutes';
 import authRoutes from './routes/authRoutes';
 
 dotenv.config();
+const prisma = new PrismaClient();
 const app = express();
 
-// --- MIDDLEWARES ---
-// 1. Middleware per abilitare CORS
+// --- MIDDLEWARE GLOBALI ---
 app.use(cors());
-
-// 2. Middleware per il parsing del body JSON delle richieste
 app.use(express.json());
 
+// --- MIDDLEWARE DI LOGGING SU DATABASE ---
+// Questo è l'unico logger che ci serve.
 app.use((req: Request, res: Response, next: NextFunction) => {
-  console.log(`[REQUEST LOGGER] --- Method: ${req.method}, URL: ${req.originalUrl}`);
+  const start = process.hrtime();
+
+  res.on('finish', async () => {
+    const diff = process.hrtime(start);
+    const latencyMs = Math.round((diff[0] * 1e9 + diff[1]) / 1e6);
+    const authReq = req as AuthRequest;
+
+    try {
+      await prisma.requestLog.create({
+        data: {
+          method: req.method,
+          path: req.originalUrl,
+          statusCode: res.statusCode,
+          latencyMs: latencyMs,
+          ipAddress: req.ip,
+          userId: authReq.userId || null,
+          apiKeyUsed: authReq.apiKeyUsed || false,
+        },
+      });
+    } catch (dbError) {
+      console.error("Fallimento scrittura log richiesta:", dbError);
+    }
+  });
+  
   next();
 });
 
