@@ -16,7 +16,6 @@ interface FilterBarProps {
   onAdvancedFilterClick: () => void;
   /** Callback invocata quando si clicca sul pulsante "Reset". */
   onResetFilters: () => void;
-  /** Un booleano che indica se ci sono filtri attivi nel pannello avanzato. Usato per l'highlighting del pulsante. */
   hasActiveAdvancedFilters: boolean;
 }
 
@@ -56,7 +55,7 @@ const FilterBar = ({
             }
           `}
           aria-haspopup="true" // Indica che il pulsante apre un altro elemento (il pannello)
-          aria-expanded={hasActiveAdvancedFilters} // Può essere legato allo stato di apertura del pannello per l'accessibilità
+          aria-expanded={hasActiveAdvancedFilters}
         >
           <span>Filtri Avanzati</span>
           {/* Indicatore visivo che appare solo se ci sono filtri avanzati attivi */}

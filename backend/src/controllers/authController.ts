@@ -1,11 +1,24 @@
-import { Request, Response, NextFunction } from 'express'; // <-- Aggiunto NextFunction
+/**
+ * @file authController.ts
+ * @description
+ * Controller per la gestione dell'autenticazione degli utenti.
+ * Gestisce la logica di login, verifica delle credenziali e generazione del token JWT.
+ * Utilizza Prisma per l'interazione con il database e bcrypt per la gestione delle password.
+ * Gestisce anche gli errori di autenticazione e fornisce risposte appropriate.
+ * Assicura che le credenziali siano validate e che il token JWT sia generato correttamente.
+ * Questo controller è fondamentale per proteggere le rotte dell'applicazione e garantire che solo gli utenti autenticati possano accedere a determinate funzionalità.
+ * Utilizza middleware per la gestione degli errori e per la validazione delle richieste.
+ * 
+ */
+
+import { Request, Response, NextFunction } from 'express'; 
 import { PrismaClient } from '@prisma/client';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
-export const login = async (req: Request, res: Response, next: NextFunction) => { // <-- Aggiunto next
+export const login = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { username, password } = req.body;
 

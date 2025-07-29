@@ -37,10 +37,9 @@ const ReviewForm = ({ phase, candidateId, onSubmitSuccess }: ReviewFormProps) =>
       if (phase === 1) {
         await submitPhase1Review(candidateId, { criteriaRatings, notes });
       } else {
-        // Per la fase 2, rinominiamo `notes` in `finalComment` per coerenza con l'API
         await submitPhase2Review(candidateId, { finalScore, hireDecision, finalComment: notes });
       }
-      onSubmitSuccess(); // Notifica il genitore
+      onSubmitSuccess();
     } catch (err: any) {
       setError(err.response?.data?.message || 'Errore nel salvataggio della revisione.');
       console.error(err);

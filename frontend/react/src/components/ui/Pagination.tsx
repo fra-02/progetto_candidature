@@ -19,16 +19,12 @@ interface PaginationProps {
 
 // --- Component Definition ---
 const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) => {
-  // --- Early return per UI pulita ---
   // Se non c'è più di una pagina, la paginazione non è necessaria.
-  // Ritornare null invece di un div vuoto è più pulito e performante.
   if (totalPages <= 1) {
     return null;
   }
 
   return (
-    // Usiamo un tag <nav> per la semantica HTML, indicando che questo è un blocco di navigazione.
-    // Gli attributi aria-* migliorano l'accessibilità per gli screen reader.
     <nav
       aria-label="Paginazione"
       className="mt-6 flex items-center justify-between"

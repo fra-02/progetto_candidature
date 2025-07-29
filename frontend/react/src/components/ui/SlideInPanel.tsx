@@ -13,11 +13,8 @@ import React, { useEffect } from 'react';
 interface SlideInPanelProps {
   /** Controlla se il pannello è visibile o meno. */
   isOpen: boolean;
-  /** Callback per chiudere il pannello, invocata dal pulsante 'X' o dal tasto 'Escape'. */
   onClose: () => void;
-  /** Il titolo visualizzato nell'header del pannello. */
   title: string;
-  /** Il contenuto principale del pannello, passato come children. */
   children: React.ReactNode;
   /** Un nodo React opzionale per il footer, tipicamente usato per pulsanti di azione. */
   footer?: React.ReactNode;

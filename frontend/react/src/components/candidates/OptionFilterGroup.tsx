@@ -18,11 +18,6 @@ interface OptionFilterGroupProps {
   options: FilterOption[];
   selectedOptions: string[];
   onToggleOption: (optionValue: string) => void;
-  /**
-   * Stile di visualizzazione. Determina come vengono renderizzate le opzioni.
-   * 'pill': Bottoni arrotondati, adatti per i tag.
-   * 'checkbox': Caselle di controllo classiche, adatte per filtri formali.
-   */
   displayMode: 'pill' | 'checkbox';
 }
 

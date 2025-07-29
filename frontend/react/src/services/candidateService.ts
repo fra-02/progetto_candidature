@@ -41,7 +41,7 @@ export interface Candidate {
   reviews: Review[];
   createdAt: string;
   updatedAt: string;
-  tags: Tag[]; // L'API ora include un array di oggetti Tag
+  tags: Tag[];
 }
 
 // --- Funzioni del Servizio ---
@@ -56,7 +56,6 @@ export const getCandidates = async (): Promise<Candidate[]> => {
   } catch (error) {
     console.error("Errore nel recupero dei candidati:", error);
     // In caso di errore, restituiamo un array vuoto per non far crashare l'UI.
-    // Una gestione più avanzata mostrerebbe un messaggio di errore all'utente.
     return [];
   }
 };

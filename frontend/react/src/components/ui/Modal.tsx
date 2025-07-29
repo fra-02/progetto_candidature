@@ -13,11 +13,10 @@ interface ModalProps {
   onClose: () => void;
   title: string;
   children: React.ReactNode;
-  footer?: React.ReactNode; // Footer opzionale per i pulsanti di azione
+  footer?: React.ReactNode;
 }
 
 const Modal = ({ isOpen, onClose, title, children, footer }: ModalProps) => {
-  // Effetto per gestire la chiusura con il tasto 'Escape'
   useEffect(() => {
     if (!isOpen) return;
 
@@ -33,15 +32,11 @@ const Modal = ({ isOpen, onClose, title, children, footer }: ModalProps) => {
     };
   }, [isOpen, onClose]);
   
-  // Non renderizzare nulla se il modale non è aperto
   if (!isOpen) {
     return null;
   }
 
   return (
-    // Portale per renderizzare il modale a livello radice del DOM, se necessario (versione avanzata).
-    // Per ora, lo inseriamo direttamente.
-
     // Contenitore principale a schermo intero con overlay
     <div
       className="fixed inset-0 bg-white shadow-2xl z-50 flex items-center justify-center p-4 transition-opacity"

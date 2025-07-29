@@ -1,3 +1,16 @@
+/**
+ * @file app.ts
+ * @description
+ * Punto di ingresso principale dell'applicazione Express.
+ * Qui inizializziamo l'applicazione, configuriamo i middleware e le rotte,
+ * e gestiamo le variabili d'ambiente.
+ * Importiamo i middleware necessari per la gestione delle richieste,
+ * come il rate limiting e l'autenticazione tramite API Key.
+ * Questo file è fondamentale per avviare il server e gestire le richieste in arrivo.
+ * Assicuriamoci che tutte le rotte siano correttamente configurate e che i middleware
+ * siano applicati in modo appropriato per garantire la sicurezza e le prestazioni dell'applicazione.
+ */
+
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';

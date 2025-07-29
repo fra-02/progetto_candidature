@@ -1,3 +1,16 @@
+/**
+ * @file candidateController.ts
+ * @description
+ * Controller per la gestione dei candidati.
+ * Gestisce la creazione, recupero, aggiornamento e cancellazione dei candidati.
+ * Utilizza Prisma per l'interazione con il database e gestisce le revisioni dei candidati
+ * in diverse fasi.
+ * Fornisce endpoint per la creazione di candidati tramite webhook, recupero della lista
+ * dei candidati, e operazioni CRUD sui candidati.
+ * Gestisce anche le revisioni di fase 1 e fase 2, permettendo agli utenti autenticati
+ * di aggiungere valutazioni e commenti.
+ */
+
 import { Request, Response, NextFunction } from 'express';
 import { PrismaClient, Prisma } from '@prisma/client';
 import { AuthRequest } from '../middlewares/jwtAuth';
@@ -161,7 +174,6 @@ export const updateCandidate = async (req: Request, res: Response, next: NextFun
                 reviews: true,
                 tags: true,
             },
-            // -----------------------------
         });
         res.json(updatedCandidate);
     } catch (error) {
@@ -178,7 +190,7 @@ export const deleteCandidate = async (req: Request, res: Response, next: NextFun
           return res.status(400).json({ message: 'Candidate ID is required' });
         }
 
-        // Usiamo una transazione per assicurare che o entrambe le operazioni
+        // Transazione per assicurare che o entrambe le operazioni
         // hanno successo, o nessuna delle due.
         await prisma.$transaction(async (tx) => {
             const typedTx = tx as Prisma.TransactionClient;
@@ -192,7 +204,6 @@ export const deleteCandidate = async (req: Request, res: Response, next: NextFun
             });
         });
 
-        // 204 No Content è la risposta standard per un DELETE riuscito.
         res.status(204).send();
     } catch (error) {
         next(error);

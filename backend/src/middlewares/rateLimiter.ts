@@ -1,3 +1,13 @@
+/**
+ * @file rateLimiter.ts
+ * @description
+ * Middleware per limitare il numero di richieste da parte degli utenti e dei bot.
+ * Utilizza express-rate-limit per implementare i limiti di richiesta.
+ * Gestisce due tipi di limiti:
+ * 1. Limite per le azioni dei bot, che sono più restrittive
+ * 2. Limite per gli utenti autenticati, che hanno un limite più alto.
+ */
+
 import rateLimit from 'express-rate-limit';
 
 // Limiter per azioni di bot

@@ -1,3 +1,15 @@
+/**
+ * @file apiKeyAuth.ts
+ * @description
+ * Middleware per l'autenticazione tramite API Key.
+ * Questo middleware verifica la presenza di una chiave API nell'header della richiesta.
+ * Se la chiave è valida, consente l'accesso alla risorsa richiesta.
+ * Altrimenti, restituisce un errore 401 Unauthorized.
+ * Utilizza un tipo di richiesta personalizzato per includere un campo `apiKeyUsed
+ * che indica se la chiave API è stata utilizzata.
+ * 
+ */
+
 import { Request, Response, NextFunction } from 'express';
 import { AuthRequest } from './jwtAuth';
 

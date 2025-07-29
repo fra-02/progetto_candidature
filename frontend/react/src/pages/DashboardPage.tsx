@@ -142,7 +142,7 @@ const DashboardPage = () => {
 
   // --- Logica di Rendering ---
 
-  // Gestiamo prima gli stati principali: caricamento ed errore.
+  // Se i dati sono in caricamento o c'è un errore, mostriamo un messaggio di stato.
   if (isLoading) {
     return <div className="p-6 text-center text-gray-500 py-10">Caricamento dati in corso...</div>;
   }

@@ -1,3 +1,15 @@
+/**
+ * @file jwtAuth.ts
+ * @description
+ * Middleware per l'autenticazione JWT.
+ * Questo middleware verifica la presenza di un token JWT nell'header Authorization della richiesta.
+ * Se il token è valido, estrae l'ID utente dal payload e lo
+ * assegna alla richiesta per l'uso nei controller successivi.
+ * Se il token non è presente o non è valido, restituisce un errore 401 Unauthorized.
+ * Utilizza un'interfaccia personalizzata per estendere la richiesta Express con un campo user
+ * che indica l'ID dell'utente autenticato.
+ */
+
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken'; // Importa anche JwtPayload
 
