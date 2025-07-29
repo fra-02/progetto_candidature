@@ -44,6 +44,12 @@ export const appReducer = (state: AppState, action: AppAction): AppState => {
         isLoading: false,
         error: action.payload,
       };
+    case 'DELETE_CANDIDATE_SUCCESS':
+      return {
+        ...state,
+        candidates: state.candidates.filter(candidate => candidate.id !== action.payload.id),
+      };
+      
     default:
       return state;
   }

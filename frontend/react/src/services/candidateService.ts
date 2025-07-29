@@ -91,3 +91,12 @@ export const submitPhase1Review = async (candidateId: number, data: any) => {
 export const submitPhase2Review = async (candidateId: number, data: any) => {
   return apiService.post(`/candidates/${candidateId}/phase-two`, data);
 };
+
+export const deleteCandidate = async (candidateId: number): Promise<void> => {
+  try {
+    await apiService.delete(`/candidates/${candidateId}`);
+  } catch (error) {
+    console.error(`Errore nella cancellazione del candidato con ID ${candidateId}:`, error);
+    throw error; // Rilancia l'errore per gestirlo a livello superiore
+  }
+};

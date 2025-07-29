@@ -27,4 +27,5 @@ export type AppAction =
 
   | { type: 'FETCH_DATA_START' } // Azioni per il caricamento dei dati
   | { type: 'FETCH_DATA_SUCCESS'; payload: { candidates: Candidate[]; tags: Tag[] } } // Azione di successo con i dati ricevuti
-  | { type: 'FETCH_DATA_FAILURE'; payload: string }; // Azione di errore con un messaggio
+  | { type: 'FETCH_DATA_FAILURE'; payload: string } // Azione di errore con un messaggio
+  | { type: 'DELETE_CANDIDATE_SUCCESS'; payload: { id: number} }; // Azione per cancellare un candidato
