@@ -1,6 +1,6 @@
-import express, { Request, Response, NextFunction } from 'express'; // <-- Aggiunti i tipi
+import express, { Request, Response, NextFunction } from 'express'; // Importa express e i tipi Request, Response, NextFunction
 import dotenv from 'dotenv';
-import { Prisma } from '@prisma/client';                    // <-- Aggiunto per i tipi di errore di Prisma
+import { Prisma } from '@prisma/client';                    // Importa Prisma per gestire gli errori specifici
 import cors from 'cors';                                    // Import delle rotte
 import candidateRoutes from './routes/candidateRoutes';
 import authRoutes from './routes/authRoutes';
@@ -14,6 +14,11 @@ app.use(cors());
 
 // 2. Middleware per il parsing del body JSON delle richieste
 app.use(express.json());
+
+app.use((req: Request, res: Response, next: NextFunction) => {
+  console.log(`[REQUEST LOGGER] --- Method: ${req.method}, URL: ${req.originalUrl}`);
+  next();
+});
 
 // --- ROUTING ---
 

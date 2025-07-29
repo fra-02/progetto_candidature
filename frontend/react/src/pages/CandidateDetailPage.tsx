@@ -11,6 +11,8 @@ import { useEffect, useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getCandidateById, type Candidate } from '../services/candidateService';
 import { useAppState } from '../store/context';
+import ReviewForm from '../components/reviews/ReviewForm';
+import ReviewDisplay from '../components/reviews/ReviewDisplay';
 
 const CandidateDetailPage = () => {
   // Recuperiamo l'ID del candidato dalla URL.
@@ -68,7 +70,18 @@ const CandidateDetailPage = () => {
     loadFullCandidateData();
   }, [id, candidateFromStore]); // Dipendenze dell'effetto.
 
-  
+    // Aggiungiamo una funzione per forzare il ricaricamento dei dati dopo aver salvato una review
+  const handleReviewSuccess = () => {
+    // La logica più semplice è ricaricare i dati del candidato
+    if (id) {
+        const loadSingleCandidate = async () => {
+            const data = await getCandidateById(id);
+            if (data) setCandidate(data);
+        };
+        loadSingleCandidate();
+    }
+  };
+
   // --- Logica di Rendering ---
 
   if (isLoading) {
@@ -82,6 +95,10 @@ const CandidateDetailPage = () => {
   if (!candidate) {
     return <div className="p-6 text-center">Nessun dato del candidato da mostrare.</div>;
   }
+
+  // Logica per determinare quale form mostrare
+  const hasPhase1Review = candidate.reviews.some(r => r.phase === 1);
+  const hasPhase2Review = candidate.reviews.some(r => r.phase === 2);
 
   return (
     <div className="space-y-6">
@@ -129,12 +146,43 @@ const CandidateDetailPage = () => {
         </div>
       </div>
 
-      {/* Placeholder per la sezione Revisioni */}
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-xl font-semibold mb-4 text-gray-700">Revisioni e Risposte</h2>
-        <p className="text-gray-500">
-          (Qui verranno visualizzate le revisioni esistenti e i form per aggiungerne di nuove).
-        </p>
+      {/* --- Card: Revisioni --- */}
+      <div className="bg-white p-6 rounded-lg shadow-md space-y-6">
+        <h2 className="text-xl font-semibold mb-2 text-gray-700">Revisioni</h2>
+
+        {/* --- 2. SOSTITUISCI IL BLOCCO DI VISUALIZZAZIONE --- */}
+        {candidate.reviews.length > 0 ? (
+          // Usiamo il nuovo componente per ogni revisione
+          candidate.reviews
+            .slice() // Crea una copia per non modificare l'originale
+            .sort((a, b) => a.phase - b.phase) // Ordina le review per fase
+            .map(review => (
+              <ReviewDisplay key={review.id} review={review} />
+            ))
+        ) : (
+          <p className="text-sm text-gray-500">Nessuna revisione presente per questo candidato.</p>
+        )}
+
+        {/* --- La logica per mostrare i form rimane invariata --- */}
+        <div className="border-t pt-6">
+          {!hasPhase1Review && (
+            <ReviewForm
+              phase={1}
+              candidateId={candidate.id}
+              onSubmitSuccess={handleReviewSuccess}
+            />
+          )}
+          {hasPhase1Review && !hasPhase2Review && (
+            <ReviewForm
+              phase={2}
+              candidateId={candidate.id}
+              onSubmitSuccess={handleReviewSuccess}
+            />
+          )}
+          {hasPhase1Review && hasPhase2Review && (
+            <p className="text-center text-green-600 font-semibold">Processo di revisione completato.</p>
+          )}
+        </div>
       </div>
     </div>
   );

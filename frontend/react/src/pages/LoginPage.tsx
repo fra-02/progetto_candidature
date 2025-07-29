@@ -34,7 +34,6 @@ const LoginPage = () => {
     }
 
     try {
-      // --- CHIAMATA API REALE ---
       // Usiamo il nostro apiService per fare una POST a /auth/login.
       // L'URL base (http://localhost:3000/api) è già configurato in apiService.
       const response = await apiService.post('/auth/login', {

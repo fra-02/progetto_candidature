@@ -1,8 +1,8 @@
 /**
  * @file seed.ts
  * @description
- * Script di seeding potenziato per popolare il database con dati di test realistici.
- * Usa Faker.js per generare 25 candidati unici con dati, stati e tag casuali.
+ * Script di seeding finale per popolare il database con dati di test realistici e completi,
+ * incluse revisioni strutturate per Fase 1 e Fase 2.
  */
 
 import { PrismaClient } from '@prisma/client';
@@ -12,7 +12,6 @@ import { faker } from '@faker-js/faker';
 const prisma = new PrismaClient();
 
 // --- Dati di Configurazione per il Seeding ---
-
 const USERS = [
   { username: 'admin', password: 'password123' },
   { username: 'recruiter', password: 'password123' },
@@ -27,8 +26,9 @@ const TAGS = [
 
 const STATUSES: ('pending' | 'reviewed' | 'rejected')[] = ['pending', 'reviewed', 'rejected'];
 
-// --- Funzione Principale di Seeding ---
+const REVIEW_CRITERIA = [ 'technical_skills', 'problem_solving', 'communication', 'culture_fit' ];
 
+// --- Funzione Principale di Seeding ---
 async function main() {
   console.log('Seeding started...');
 
@@ -79,42 +79,54 @@ async function main() {
         status,
         fullName,
         email,
-        githubLink: `github.com/${faker.internet.userName({ firstName, lastName })}`,
+        githubLink: `github.com/${faker.internet.username({ firstName, lastName })}`, // CORRETTO: username()
         rawAnswers: { "screen_0_TextInput_0": fullName, "screen_0_TextInput_1": email },
-        // CORREZIONE: Usa la sintassi 'connect' per la relazione M-N
         tags: {
           connect: randomTags.map(tag => ({ id: tag.id })),
         },
       },
     });
 
+    // --- Aggiungi revisioni strutturate per candidati non "pending" ---
     if (status !== 'pending') {
+      const reviewer = faker.helpers.arrayElement(createdUsers);
+
+      // --- Revisione di Fase 1 ---
+      const criteriaRatings: { [key: string]: number } = {};
+      REVIEW_CRITERIA.forEach(criteria => {
+        // Genera un punteggio da 1 a 5 per ogni criterio
+        criteriaRatings[criteria] = faker.number.int({ min: 1, max: 5 });
+      });
+
       await prisma.review.create({
         data: {
           phase: 1,
-          // CORREZIONE: Usa 'fractionDigits' invece di 'precision'
-          grade: faker.number.float({ min: 4, max: 10, fractionDigits: 1 }),
+          criteriaRatings, // Salva l'oggetto JSON con i punteggi dei criteri
           notes: faker.lorem.sentence(),
           candidateId: candidate.id,
-          userId: faker.helpers.arrayElement(createdUsers).id,
+          userId: reviewer.id,
         },
       });
 
-      if (status === 'reviewed' && Math.random() > 0.5) {
+      // --- Revisione di Fase 2 (solo per i candidati "reviewed") ---
+      if (status === 'reviewed') {
+        const finalScore = faker.number.float({ min: 7, max: 10, fractionDigits: 1 });
         await prisma.review.create({
           data: {
             phase: 2,
-            // CORREZIONE: Usa 'fractionDigits' invece di 'precision'
-            grade: faker.number.float({ min: 6, max: 10, fractionDigits: 1 }),
-            notes: faker.lorem.sentence(),
+            finalScore,
+            // La decisione è basata sul punteggio finale per coerenza
+            hireDecision: finalScore > 7.5,
+            finalComment: faker.lorem.paragraph(),
             candidateId: candidate.id,
+            // La Fase 2 potrebbe essere fatta da un altro utente
             userId: faker.helpers.arrayElement(createdUsers).id,
           },
         });
       }
     }
   }
-  console.log('25 candidates created successfully.');
+  console.log('25 candidates with detailed reviews created successfully.');
   console.log('Seeding finished.');
 }
 

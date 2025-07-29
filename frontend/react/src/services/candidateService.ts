@@ -17,8 +17,14 @@ export interface Tag {
 export interface Review {
   id: number;
   phase: number;
-  grade: number | null;
+  // Campi Fase 1
+  criteriaRatings: any; // Usiamo 'any' per semplicità, o un oggetto più specifico
   notes: string | null;
+  // Campi Fase 2
+  finalScore: number | null;
+  hireDecision: boolean | null;
+  finalComment: string | null;
+  // Info relazione
   userId: number;
   createdAt: string;
 }
@@ -76,4 +82,12 @@ export const getCandidateById = async (id: string): Promise<Candidate | null> =>
     console.error(`Errore nel recupero del candidato con ID ${id}:`, error);
     return null; // In caso di errore, restituiamo null per gestire l'errore nell'UI
   }
+};
+
+export const submitPhase1Review = async (candidateId: number, data: any) => {
+  return apiService.post(`/candidates/${candidateId}/phase-one`, data);
+};
+
+export const submitPhase2Review = async (candidateId: number, data: any) => {
+  return apiService.post(`/candidates/${candidateId}/phase-two`, data);
 };

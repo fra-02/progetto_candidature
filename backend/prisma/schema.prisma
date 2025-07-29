@@ -46,8 +46,15 @@ model Candidate {
 model Review {
   id          Int      @id @default(autoincrement())
   phase       Int      // 1 o 2
-  grade       Float?
-  notes       String?  @db.Text
+  
+  // --- Campi Fase 1 ---
+  criteriaRatings Json?
+  notes           String?  @db.Text
+
+  // --- Campi Fase 2 ---
+  finalScore      Float?   // Punteggio complessivo
+  hireDecision    Boolean? // true = Assumere, false = Non assumere
+  finalComment    String?  @db.Text
   
   candidate   Candidate @relation(fields: [candidateId], references: [id])
   candidateId Int
@@ -56,4 +63,6 @@ model Review {
   userId      Int
   
   createdAt   DateTime @default(now())
+
+  @@unique([candidateId, userId, phase])
 }

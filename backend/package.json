@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
-    "db:sync": "npx prisma migrate dev --name init && npx prisma db seed",
+    "db:sync": "npx prisma migrate dev --name update_review_model",
+    "db:seed": "npx prisma db seed",
     "dev": "npm run db:sync && nodemon src/server.ts"
   },
   "prisma": {

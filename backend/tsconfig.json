@@ -1,16 +1,30 @@
 {
   "compilerOptions": {
-    "sourceMap": true,
-    "outDir": "dist",
-    "strict": true,
-    "lib": ["esnext"],
+    /* Base Options */
     "esModuleInterop": true,
-    "module": "commonjs",
-    "target": "es2020",
-    "moduleResolution": "node",
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "types": ["node"] // Esplicito caricamento dei tipi di node
+    "target": "es2020",
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "moduleDetection": "force",
+    "isolatedModules": true,
+
+    /* Strictness */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitAny": true,
+
+    /* Module Options */
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "types": ["node"], // Assicura che i tipi di Node.js siano sempre disponibili
+    
+    /* Path Options */
+    "rootDir": ".",
+    "outDir": "dist",
+
+    /* Source Map Options */
+    "sourceMap": true,
   },
   "include": [
     "src/**/*.ts",
@@ -19,6 +33,7 @@
   "exclude": [
     "node_modules"
   ],
+  // Configurazione specifica per ts-node (usato da `prisma db seed`)
   "ts-node": {
     "compilerOptions": {
       "module": "CommonJS"
